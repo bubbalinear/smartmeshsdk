@@ -82,6 +82,7 @@ COL_TEMPERATURE  = 'temperature'
 COL_TEMP_NUM     = 'num. temp'
 COL_TEMP_CLR     = 'clear temp'
 COL_TEMP_RATE    = 'publish rate (ms)'
+COL_ACTION_1     = 'action1'
 
 #============================ body ============================================
 
@@ -521,58 +522,63 @@ class HeliostatGui(object):
         
         # add a mote list frame
         columnnames =       [
-                                # led
-                                {
-                                    'name': COL_LED,
-                                    'type': dustFrameMoteList.dustFrameMoteList.ACTION,
-                                },
-                                # counters and latency
-                                {
-                                    'name': COL_NOTIF_DATA,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_NOTIF_IPDATA,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_NOTIF_HR,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_LAT_MIN,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_LAT_CUR,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_LAT_MAX,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_NOTIF_CLR,
-                                    'type': dustFrameMoteList.dustFrameMoteList.ACTION,
-                                },
-                                # temperature
-                                {
-                                    'name': COL_TEMPERATURE,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_TEMP_NUM,
-                                    'type': dustFrameMoteList.dustFrameMoteList.LABEL,
-                                },
-                                {
-                                    'name': COL_TEMP_CLR,
-                                    'type': dustFrameMoteList.dustFrameMoteList.ACTION,
-                                },
-                                {
-                                    'name': COL_TEMP_RATE,
-                                    'type': dustFrameMoteList.dustFrameMoteList.GETSETONEVAL,
-                                },
-                            ]
+            # led
+            {
+                'name': COL_LED,
+                'type': dustFrameMoteList.dustFrameMoteList.ACTION,
+            },
+            # counters and latency
+            {
+                'name': COL_NOTIF_DATA,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_NOTIF_IPDATA,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_NOTIF_HR,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_LAT_MIN,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_LAT_CUR,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_LAT_MAX,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_NOTIF_CLR,
+                'type': dustFrameMoteList.dustFrameMoteList.ACTION,
+            },
+            # temperature
+            {
+                'name': COL_TEMPERATURE,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_TEMP_NUM,
+                'type': dustFrameMoteList.dustFrameMoteList.LABEL,
+            },
+            {
+                'name': COL_TEMP_CLR,
+                'type': dustFrameMoteList.dustFrameMoteList.ACTION,
+            },
+            {
+                'name': COL_TEMP_RATE,
+                'type': dustFrameMoteList.dustFrameMoteList.GETSETONEVAL,
+            },
+            # control and latency
+            {
+                'name': COL_ACTION_1,
+                'type': dustFrameMoteList.dustFrameMoteList.ACTION,
+            },
+        ]
         self.moteListFrame = dustFrameMoteList.dustFrameMoteList(self.window,
                                                self.guiLock,
                                                columnnames,
@@ -641,11 +647,11 @@ class HeliostatGui(object):
         
         # start a notification client
         self.notifClientHandler = notifClient(
-                    self.apiDef,
-                    self.connector,
-                    self._connectionFrameCb_disconnected,
-                    self.latencyCalculator,
-                )
+            self.apiDef,
+            self.connector,
+            self._connectionFrameCb_disconnected,
+            self.latencyCalculator,
+        )
         
         # retrieve list of motes from manager
         macs = self._getOperationalMotesMacAddresses()
@@ -713,6 +719,22 @@ class HeliostatGui(object):
         # update status
         self.statusFrame.write(
                 "Temperature data for mote {0} cleared successfully.".format(
+                    FormatUtils.formatMacString(mac),
+                )
+            )
+    
+    def _moteListFrameCb_action1(self,mac,button):
+        
+        # send the command to the mote
+        try:
+            print "send command action1"
+        except Exception as err:
+            print "ERROR!!!"
+            print err
+        else:
+            # update status
+            self.statusFrame.write(
+                "action1 command sent successfully to mote {0}.".format(
                     FormatUtils.formatMacString(mac),
                 )
             )
@@ -851,6 +873,10 @@ class HeliostatGui(object):
                                         'max':      60000,
                                         'cb_get':   self._moteListFrameCb_rateGet,
                                         'cb_set':   self._moteListFrameCb_rateSet,
+                                    },
+            COL_TEMP_CLR:           {
+                                        'text':     'action1',
+                                        'callback': self._moteListFrameCb_action1,
                                     },
         }
         
