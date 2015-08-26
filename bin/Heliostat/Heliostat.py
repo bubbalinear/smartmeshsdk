@@ -86,7 +86,7 @@ COL_TEMP_RATE    = 'publish rate (ms)'
 #============================ body ============================================
 
 ##
-# \addtogroup TempMonitor
+# \addtogroup Heliostat
 # \{
 # 
 
@@ -484,7 +484,7 @@ class notifClient(object):
             # unlock the data structure
             self.dataLock.release()
 
-class TempMonitorGui(object):
+class HeliostatGui(object):
     
     def __init__(self):
         
@@ -497,8 +497,10 @@ class TempMonitorGui(object):
         self.oap_clients        = {}
         
         # create window
-        self.window = dustWindow.dustWindow('TempMonitor',
-                                 self._windowCb_close)
+        self.window = dustWindow.dustWindow(
+            'Heliostat',
+             self._windowCb_close
+        )
         
         # add a API selection frame
         self.apiFrame = dustFrameApi.dustFrameApi(
@@ -590,7 +592,7 @@ class TempMonitorGui(object):
     def start(self):
         
         # log
-        log.debug("Starting TempMonitorGui")
+        log.debug("Starting HeliostatGui")
         
         # start Tkinter's main thead
         try:
@@ -942,13 +944,13 @@ class TempMonitorGui(object):
 #============================ main ============================================
 
 def main():
-    TempMonitorGuiHandler = TempMonitorGui()
-    TempMonitorGuiHandler.start()
+    HeliostatGuiHandler = HeliostatGui()
+    HeliostatGuiHandler.start()
 
 if __name__ == '__main__':
     main()
 
 ##
-# end of TempMonitor
+# end of Heliostat
 # \}
 # 
