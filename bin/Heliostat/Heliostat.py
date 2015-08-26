@@ -844,6 +844,9 @@ class HeliostatGui(object):
         # order by increasing MAC address
         returnVal.sort()
         
+        # add the broadcast address
+        returnVal += [tuple([0xff]*8)]
+        
         return returnVal
     
     def _addNewMote(self,mac):
