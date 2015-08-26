@@ -874,7 +874,7 @@ class HeliostatGui(object):
                                         'cb_get':   self._moteListFrameCb_rateGet,
                                         'cb_set':   self._moteListFrameCb_rateSet,
                                     },
-            COL_TEMP_CLR:           {
+            COL_ACTION_1:           {
                                         'text':     'action1',
                                         'callback': self._moteListFrameCb_action1,
                                     },
