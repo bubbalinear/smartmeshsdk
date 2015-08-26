@@ -82,7 +82,7 @@ COL_TEMPERATURE  = 'temperature'
 COL_TEMP_NUM     = 'num. temp'
 COL_TEMP_CLR     = 'clear temp'
 COL_TEMP_RATE    = 'publish rate (ms)'
-COL_ACTION_1     = 'action1'
+COL_ACTION1      = 'action1'
 
 #============================ body ============================================
 
@@ -575,7 +575,7 @@ class HeliostatGui(object):
             },
             # control and latency
             {
-                'name': COL_ACTION_1,
+                'name': COL_ACTION1,
                 'type': dustFrameMoteList.dustFrameMoteList.ACTION,
             },
         ]
@@ -727,7 +727,14 @@ class HeliostatGui(object):
         
         # send the command to the mote
         try:
-            print "send command action1"
+            self.connector.dn_sendData(
+                macAddress   = mac,
+                priority     = 2,
+                srcPort      = 0xf0b9,
+                dstPort      = 0xf0b9,
+                options      = 0,
+                data         = [0xB3,0xCE],
+            )
         except Exception as err:
             print "ERROR!!!"
             print err
@@ -874,7 +881,7 @@ class HeliostatGui(object):
                                         'cb_get':   self._moteListFrameCb_rateGet,
                                         'cb_set':   self._moteListFrameCb_rateSet,
                                     },
-            COL_ACTION_1:           {
+            COL_ACTION1:            {
                                         'text':     'action1',
                                         'callback': self._moteListFrameCb_action1,
                                     },
